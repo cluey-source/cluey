@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Detective: Case File NSW-1978</title>
+    <style>
+        :root {
+            --bg-color: #e0d8c3;
+            --folder-color: #f3e5ab;
+            --paper-color: #ffffff;
+            --text-color: #1a1a1a;
+            --confidential-color: rgb(255,53,53);
+            --accent-color: rgb(32,32,32);
+            --success-color: #4CBB17;
+            --success-text-color: #1e4620;
+            --wrong-color: rgb(180,0,0);
+            --border-color: #b5a38a;
+            --dossier-bg: #f9f6ef;
+        }
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        #game-container {
+            background-color: var(--folder-color);
+            width: 100%;
+            max-width: 700px;
+            padding: 50px 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        #game-container::before {
+            content: "CONFIDENTIAL";
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            border: 2px solid var(--confidential-color);
+            color: var(--confidential-color);
+            padding: 4px 8px;
+            transform: rotate(5deg);
+            font-weight: 800;
+            opacity: 0.6;
+        }
+        .paper-sheet {
+            background: var(--paper-color);
+            padding: 30px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 { font-family: 'Courier New', monospace; border-bottom: 2px solid #333; margin-top: 0; }
+        h2 { font-size: 1.1em; text-transform: uppercase; color: var(--accent-color); margin-top: 20px; }
+        .metadata-box { background: #f0f0f0; padding: 15px; border: 1px dashed #ccc; margin-bottom: 20px; }
+        .clue-text { line-height: 1.6; font-size: 1.1em; margin-bottom: 15px; }
+        
+        /* Dossier Style */
+        .dossier-section {
+            background: var(--dossier-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dossier-item {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+            color: #444;
+        }
+        .dossier-item span { color: var(--success-text-color); font-weight: bold; }
+
+        .options { display: grid; gap: 10px; }
+        button {
+            background: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        button:hover:not(:disabled) { background: rgb(103,103,103); }
+        button:disabled { cursor: default; opacity: 0.7; }
+        button.questions:hover:not(:disabled) { background: #e9ecef; }
+        button.questions:disabled { cursor: default; opacity: 0.7; }
+        .nav-btn {
+            margin-top: 20px;
+            background: var(--accent-color);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            padding: 15px;
+            display: block;
+            width: 100%;
+        }
+        .feedback { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-left: 5px solid;
+            font-size: 0.95em;
+            background-color: #fdfff5;
+        }
+        .hidden { display: none; }
+        .score-display { font-size: 2em; text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="paper-sheet" id="screen-content"></div>
+</div>
+
+<script src="case.js"></script>
+
+<script>
+/*const caseData = {
+  "metadata": {
+    "case_id": "UK-1958",
+    "case_name": "The Botanical Blueprint",
+    "year": 1958,
+    "location": "Cheshire, England",
+    "status": "Active Investigation",
+    "briefing": "A victim's body is found in a clean, industrial warehouse. However, the victim was a known hiker who disappeared 48 hours ago. You suspect he was killed elsewhere and moved, but the suspect's car is spotless."
+  },
+  "clues": [
+    {
+      "description": "The victim's boots are covered in a thick, bluish clay mud. This specific clay is only found in three distinct regions within a 50-mile radius.",
+      "question": "What is the most logical forensic use of this mud sample?",
+      "options": [
+        "Test for chemical pollutants to see if it came from a factory.",
+        "Use it as a geographic anchor to narrow the search area for the primary crime scene.",
+        "Compare the mud color to the suspect's driveway."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. Soil and clay types act as 'environmental fingerprints.' By identifying the specific geological makeup, you can eliminate 95% of the surrounding landscape."
+    },
+    {
+      "description": "Vacuuming the suspect’s car floor mats reveals microscopic grains of 'Cedrus libani' (Cedar of Lebanon) pollen. This tree is non-native and extremely rare in this county.",
+      "question": "The suspect claims he hasn't left the city. How does this pollen disprove his alibi?",
+      "options": [
+        "Pollen is seasonal, so it proves he was driving during the spring.",
+        "The rare pollen acts as a 'GPS trace,' linking the car to one of the few estates where these trees grow.",
+        "The quantity of pollen suggests he was allergic and likely sneezing."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. Rare 'indicator species' of pollen are highly specific. If the suspect's car contains rare Cedar pollen, he must have been in close proximity to one of those specific trees."
+    },
+    {
+      "description": "The victim’s watch has stopped at 10:15. There are microscopic scratches on the glass containing traces of 'Lecidea' (a type of rock lichen).",
+      "question": "What does the presence of lichen *inside* the scratches suggest?",
+      "options": [
+        "The victim was wearing the watch for a long time.",
+        "The watch was struck against a specific type of stone wall or rock face during a struggle.",
+        "The watch is an antique and the lichen grew there naturally."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. Trace transfer of biological material like lichen into a fresh scratch confirms a high-impact interaction with a specific environmental feature (like a stone boundary)."
+    },
+    {
+      "description": "The suspect, 'Graham,' owns a jacket that matches the victim's description of a struggle. You find a single 'sticky' seed from a 'Circaea lutetiana' (Enchanter's Nightshade) plant on the cuff.",
+      "question": "This plant only grows in deep, undisturbed ancient woodland. Why is this seed better evidence than the mud?",
+      "options": [
+        "Seeds stay attached to fabric much longer than dried mud.",
+        "It narrows the 'geographic anchor' from a general clay region to a specific ecological habitat (ancient woods).",
+        "The seed proves the suspect is a gardener."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. While mud covers a region, specific woodland plants narrow the scene down to a few hundred square yards within that region."
+    },
+    {
+      "description": "At the identified woodland site, you find a depression in the earth. A chemical test of the soil shows high levels of 'Urease' (an enzyme found in human sweat and skin).",
+      "question": "What is the final deduction regarding this specific patch of dirt?",
+      "options": [
+        "It is a natural phenomenon in ancient forests.",
+        "It marks the exact spot where a struggle occurred and the victim was held down.",
+        "The suspect spilled a chemical cleaning agent there."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. Biological enzymes like Urease persist in soil after contact. This confirms the 'Contact Point' between the victim and the ground, providing the final link for the murder scene."
+    }
+  ],
+  "summary": "By combining geological clay analysis with 'indicator' pollen and woodland seeds, investigators were able to find a remote crime scene the suspect never admitted to visiting. This case proved that nature 'records' every step a killer takes."
+}
+;*/
+
+let currentStep = -1; 
+let score = 0;
+let dossier = []; // Stores correct findings
+const container = document.getElementById('screen-content');
+
+function getDaysBetweenDatesLocal(dateGiven) {
+  // Get the current date in local time, without the time portion
+  const currentDateLocal = new Date();
+  currentDateLocal.setHours(0, 0, 0, 0); // set to the start of the day
+
+  // Get the given date, also without the time portion, in the local timezone
+  const givenDateLocal = new Date(dateGiven);
+  givenDateLocal.setHours(0, 0, 0, 0);
+
+  // Calculate the difference in milliseconds
+  const timeDifferenceMs = givenDateLocal.getTime() - currentDateLocal.getTime();
+
+  // Convert to days (1000ms * 60s * 60m * 24h)
+  const daysDifference = timeDifferenceMs / (1000 * 60 * 60 * 24);
+
+  // Return the difference (positive or negative) as a whole number of days
+  return Math.floor(daysDifference) * -1;
+}
+
+const pastDate = new Date("2026-02-18T00:00:00");
+// Note: The result depends on your current local time zone and the exact moment the code runs.
+var caseIndex=getDaysBetweenDatesLocal(pastDate);
+console.log("Days since past date:", caseIndex);
+
+var caseData=allCaseData[caseIndex];
+
+function render() {
+    container.innerHTML = '';
+    if (currentStep === -1) renderMetadata();
+    else if (currentStep < caseData.clues.length) renderClue(currentStep);
+    else renderResults();
+}
+
+function renderMetadata() {
+    container.innerHTML = `
+        <h1>Case Briefing: ${caseData.metadata.year}</h1>
+        <div class="metadata-box">
+            <strong>ID:</strong> ${caseData.metadata.case_id}<br>
+            <strong>NAME:</strong> ${caseData.metadata.case_name}<br>
+			<strong>YEAR:</strong> ${caseData.metadata.year}<br>
+            <strong>LOC:</strong> ${caseData.metadata.location}
+        </div>
+        <p class="clue-text">${caseData.metadata.briefing}</p>
+        <button class="nav-btn" onclick="nextStep()">BEGIN INVESTIGATION</button>
+    `;
+}
+
+function renderClue(index) {
+    const clue = caseData.clues[index];
+    let dossierHTML = dossier.length > 0 ? `
+        <div class="dossier-section">
+            <h2>Dossier of Proven Facts:</h2>
+            ${dossier.map(item => `<div class="dossier-item">✓ ${item.desc} — <span>${item.fact}</span></div>`).join('')}
+        </div>` : '';
+
+    container.innerHTML = `
+        <h1>Evidence Step ${index + 1} of ${caseData.clues.length}</h1>
+        ${dossierHTML}
+        <p class="clue-text"><strong>New Finding:</strong> ${clue.description}</p>
+        <p><strong>Query:</strong> ${clue.question}</p>
+        <div class="options" id="options"></div>
+        <div id="feedback-area" class="hidden"></div>
+        <button id="next-btn" class="nav-btn hidden" onclick="nextStep()">PROCEED TO NEXT STEP</button>
+    `;
+
+    clue.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+		btn.classList.add('questions');
+        btn.innerText = opt;
+        btn.onclick = () => handleChoice(i, clue);
+        document.getElementById('options').appendChild(btn);
+    });
+}
+
+function handleChoice(selected, clue) {
+    const feedbackArea = document.getElementById('feedback-area');
+    const buttons = document.querySelectorAll('.options button');
+    buttons.forEach(b => b.disabled = true);
+
+    feedbackArea.classList.remove('hidden');
+    feedbackArea.className = 'feedback';
+    
+    if (selected === clue.answer_index) {
+        score++;
+        dossier.push({desc: clue.description, fact: clue.logic});
+        feedbackArea.style.borderColor = 'var(--success-color)';
+        feedbackArea.style.color = 'var(--success-text-color)';
+        feedbackArea.innerHTML = `<strong>Confirmed:</strong> ${clue.logic}`;
+    } else {
+        feedbackArea.style.borderColor = 'var(--wrong-color)';
+        feedbackArea.style.color = 'var(--wrong-text-color)';
+        feedbackArea.innerHTML = `<strong>Error in Logic:</strong> The correct deduction was: ${clue.logic}`;
+    }
+    document.getElementById('next-btn').classList.remove('hidden');
+}
+
+function renderResults() {
+    container.innerHTML = `
+        <h1>Case Closed</h1>
+        <!--<div class="score-display">Deduction Accuracy: <strong>${Math.round((score/caseData.clues.length)*100)}%</strong></div>-->
+		<div class="score-display">Deduction Accuracy: <strong>${score} out of ${caseData.clues.length}</strong></div>
+        <p class="clue-text"><strong>Final Report:</strong> ${caseData.summary}</p>
+        <button class="nav-btn" onclick="location.reload()">RE-OPEN CASE FILES</button>
+    `;
+}
+
+function nextStep() { currentStep++; render(); }
+render();
+</script>
+</body>
+</html>
