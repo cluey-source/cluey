@@ -202,5 +202,73 @@ const allCaseData = [
       }
     ],
     "summary": "UV spectroscopy, polymer analysis, and cell-tower RSSI values combined to place the suspect's car and person at the scene of the hit-and-run."
-  }
+  },
+  {
+  "metadata": {
+    "case_id": "CA-2026-MET",
+    "case_name": "The Copper Coincidence",
+    "year": 2026,
+    "location": "Chicago, USA",
+    "status": "Active Investigation",
+    "briefing": "A high-end art gallery's backup generator was stripped of its copper wiring during a blackout. A local scrap dealer flagged a suspicious drop-off later that night."
+  },
+  "clues": [
+    {
+      "description": "The thief used a high-tension industrial shear to cut the heavy-gauge cables. The cut patterns show a 'left-handed' serration mark.",
+      "question": "What does a 'serration mark' analysis tell a forensic tool investigator?",
+      "options": [
+        "It identifies the exact retail store where the tool was bought.",
+        "It reveals unique 'fingerprint' defects on the blade's edge.",
+        "It proves the thief was wearing heavy leather work gloves."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. Toolmark identification treats microscopic nicks in a blade like a fingerprint, allowing investigators to match a tool to a specific cut."
+    },
+    {
+      "description": "At the scrap yard, the suspect sold 50lbs of 'Bright & Shiny' copper. However, his clothes are covered in a fine, pale-green dust.",
+      "question": "What is the likely chemical origin of this specific green 'dust' found on the suspect?",
+      "options": [
+        "It is oxidized copper carbonate from aged outdoor statues.",
+        "It is a rare toxic mold found only in damp art gallery basements.",
+        "It is dried green spray paint used to mark utility lines."
+      ],
+      "answer_index": 0,
+      "logic": "Correct. Copper turns green (patina) over time due to oxidation. This suggests the suspect didn't just have 'new' wire, but had been handling old, weathered copper."
+    },
+    {
+      "description": "The suspect’s truck bed contains traces of 'Isolene-B,' a specialized synthetic coolant used in high-voltage industrial generators.",
+      "question": "Why is 'Isolene-B' more incriminating than standard automotive motor oil?",
+      "options": [
+        "It is only sold to licensed electrical contractors.",
+        "It glows bright purple when exposed to any sunlight.",
+        "It is a niche dielectric fluid not found in cars."
+      ],
+      "answer_index": 2,
+      "logic": "Correct. Finding dielectric coolant in a standard pickup truck links the vehicle directly to industrial electrical equipment rather than normal mechanical work."
+    },
+    {
+      "description": "Security footage shows a truck fleeing the gallery. The license plate is obscured, but the muffler emits a high-pitched 'whistle' at 440Hz.",
+      "question": "How can forensic audio experts use this 'whistle' to identify the specific vehicle?",
+      "options": [
+        "By matching the acoustic frequency to a specific engine leak.",
+        "By calculating the speed of the truck based on the volume.",
+        "By identifying the manufacturer's 'audio-brand' signature."
+      ],
+      "answer_index": 0,
+      "logic": "Correct. Narrow-band frequency analysis can identify unique mechanical 'groans' or 'whistles' that act as an acoustic signature for a specific damaged vehicle."
+    },
+    {
+      "description": "VERDICT: The suspect claims he found the copper in a dumpster behind a construction site. You have the toolmarks, the green dust, the coolant, and the audio signature.",
+      "question": "What is the final verdict based on the synthesis of this forensic evidence?",
+      "options": [
+        "He is innocent; the copper came from a standard renovation.",
+        "He is guilty; the coolant and old patina contradict his story.",
+        "He is a witness; he saw the real thief leave the art gallery."
+      ],
+      "answer_index": 1,
+      "logic": "Correct. The 'Bright' copper he sold doesn't match the green dust on his clothes, and the industrial coolant proves he was at a generator, not a construction dumpster."
+    }
+  ],
+  "summary": "By linking toolmark impressions, chemical oxidation (patina), and specialized dielectric coolants, the investigation disproved the suspect's 'dumpster diving' alibi."
+}
 ]
